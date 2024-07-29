@@ -4,7 +4,7 @@
 SELECT 
 COUNT(*) AS NumMatches,
 COUNT(*) / 25362 * 100 AS percent_matches
-FROM 'atp_tennis_1.csv'
+FROM atp_tennis_data
 WHERE 
     (
         (Rank_1 <= 10 AND Rank_2 > 100 AND Winner = Player_2) OR
@@ -21,7 +21,7 @@ Player_2,
 Winner,
 ROW_NUMBER() OVER (PARTITION BY Player_1 ORDER BY Date) AS P1_Rank,
 ROW_NUMBER() OVER (PARTITION BY Player_2 ORDER BY Date) AS P2_Rank
-	FROM atp_tennis_1.csv),
+	FROM atp_tennis_data),
 	
 Streaks AS (
 SELECT
@@ -64,14 +64,14 @@ WITH matches_lost AS (
         Player_1 AS Player,
         Winner,
         Date
-    FROM atp_tennis_1.csv
+    FROM atp_tennis_data
     WHERE Player_1 != Winner AND Player_1 LIKE '%Federer%'
     UNION ALL
     SELECT
         Player_2 AS Player,
         Winner,
         Date
-    FROM atp_tennis_1.csv
+    FROM atp_tennis_data
     WHERE Player_2 != Winner AND Player_2 LIKE '%Federer%'
 )
 SELECT
@@ -89,14 +89,14 @@ WITH matches_won AS (
         Player_2 AS Player,
         Winner,
         Date
-    FROM atp_tennis_1.csv
+    FROM atp_tennis_data
     WHERE Player_1 = Winner AND Player_1 LIKE '%Federer%'
     UNION ALL
     SELECT
         Player_1 AS Player,
         Winner,
         Date
-    FROM atp_tennis_1.csv
+    FROM atp_tennis_data
     WHERE Player_2 = Winner AND Player_2 LIKE '%Federer%')
 	
 	
@@ -116,14 +116,14 @@ WITH Matches2015 AS (
         Tournament,
         Player_1 AS Player,
         Date
-    FROM atp_tennis_1.csv
+    FROM atp_tennis_data
     WHERE YEAR(Date) = 2015
     UNION ALL
     SELECT
         Tournament,
         Player_2 AS Player,
         Date
-    FROM atp_tennis_1.csv
+    FROM atp_tennis_data
     WHERE YEAR(Date) = 2015
 )
 SELECT
